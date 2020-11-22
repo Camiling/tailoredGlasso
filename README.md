@@ -4,7 +4,7 @@ tailoredGlasso
 ==============
 
 <!-- badges: start -->
-\[![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)\]\[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)\](<https://opensource.org/licenses/MIT>) <!-- badges: end -->
+[![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT) <!-- badges: end -->
 
 <!-- IF ON CRAN [![CRAN_Status_Badge](https://www.r-pkg.org/badges/version-last-release/shapr)]
 [![CRAN_Downloads_Badge](https://cranlogs.r-pkg.org/badges/grand-total/shapr)]---->
