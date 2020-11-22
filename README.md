@@ -42,7 +42,7 @@ The following examples show how `tailoredGlasso` selects how strongly the inform
 The data is generated using the `huge` R package (Jiang et al. (2020)), as it includes functionality for generating data from a Gaussian graphical model. The networks we generate are *scale-free*, which is a known trait in many real-life networks such as genomic networks (Kolaczyk (2009)).
 
 ``` r
-#  Scale-free data where prior weight matrix is highly informative for the data of interest.
+#  scale-free data where prior weight matrix is highly informative for the data of interest.
 set.seed(123)
 n <- 80
 p <- 100
@@ -62,7 +62,7 @@ precision(abs(prec.mat) > 1e-7, adj.mat) # high precision considering the high-d
 #> [1] 0.5625
 
 
-# Scale-free data where prior weight matrix is completely uninformative for the data of interest.
+# scale-free data where prior weight matrix is completely uninformative for the data of interest.
 set.seed(123)
 n <- 80
 p <- 100
@@ -77,7 +77,7 @@ res <- tailoredGlasso(dat$data, prior.mat, scale = T, verbose = F)
 res$k.opt # very small k is chosen
 #> [1] 0.23
 adj.mat <- res$theta.opt != 0 # the adjacency matrix of the corresponding graph
-precision(abs(dat$omega) > 1e-7, adj.mat) # Lower precision as prior matrix did not provide any additional information.
+precision(abs(dat$omega) > 1e-7, adj.mat) # lower precision as prior matrix did not provide any additional information.
 #> [1] 0.2857143
 ```
 

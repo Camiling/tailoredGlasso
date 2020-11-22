@@ -166,7 +166,7 @@ Below we show one example where the prior weight matrix is very informative for 
 The data is generated using the `huge` R package (@huge), as it includes functionality for generating data from a Gaussian graphical model. The networks we generate are *scale-free*, which is a known trait in many real-life networks such as genomic networks (@kolaczyk09). 
 
 ```{r, warning = FALSE}
-#  Scale-free data where prior weight matrix is highly informative for the data of interest.
+#  scale-free data where prior weight matrix is highly informative for the data of interest.
 set.seed(123)
 n <- 80
 p <- 100
@@ -179,7 +179,7 @@ adj.mat <- res$theta.opt !=0 # the adjacency matrix of the corresponding graph
 precision(abs(prec.mat) > 1e-7, adj.mat) # high precision considering the high-dimensionality of the problem. 
 
 
-# Scale-free data where prior weight matrix is completely uninformative for the data of interest.
+# scale-free data where prior weight matrix is completely uninformative for the data of interest.
 set.seed(123)
 n <- 80
 p <- 100
@@ -190,13 +190,13 @@ prior.mat <- abs(cov2cor(prec.mat.prior)) # the prior weights are the absolute v
 res <- tailoredGlasso(dat$data, prior.mat, scale = T,verbose = F)
 res$k.opt # very small k is chosen
 adj.mat <- res$theta.opt !=0 # the adjacency matrix of the corresponding graph 
-precision(abs(dat$omega) > 1e-7, adj.mat) # Lower precision as prior matrix did not provide any additional information. 
+precision(abs(dat$omega) > 1e-7, adj.mat) # lower precision as prior matrix did not provide any additional information. 
 ```
 
 The resulting tailored graphical lasso graph can be visualised with functions from the `network` and `ggnet2` libraries. 
 
 
-```{r,fig.align='center', out.width='60%'}
+```{r,fig.align='center', out.width='60%',results='hide'}
 set.seed(1234)
 net =network::network(adj.mat)
 GGally::ggnet2(net,alpha=0.9,mode = "fruchtermanreingold",color = 'deepskyblue2')
