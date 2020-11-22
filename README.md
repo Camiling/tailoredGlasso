@@ -92,7 +92,7 @@ GGally::ggnet2(net, alpha = 0.9, mode = "fruchtermanreingold", color = "deepskyb
 #>   +.gg   ggplot2
 ```
 
-<img src="README_files/figure-markdown_github/unnamed-chunk-4-1.png" width="60%" style="display: block; margin: auto;" />
+<img src="man/figures/README-unnamed-chunk-4-1.png" width="60%" style="display: block; margin: auto;" />
 
 Contribution
 ------------
