@@ -39,6 +39,10 @@
 #'   \item{sparsity}{The sparsities of the models corresponding to different \eqn{k}.}
 #'   \item{loglikelihoods}{The log likelihood values of the models corresponding to different \eqn{k}.}
 #'   \item{thetas}{The estimated precision matrices corresponding to different \eqn{k}.}
+#'   \item{w0}{The sigmoid midpoint used.}
+#'   \item{opt.loglikelihood}{The log likelihood value of the selected precision matrix.}
+#'   \item{lambda.glasso}{The value of \eqn{\lambda} selected for the unweighted graphical lasso graph.}
+
 #' }
 #'
 #'
@@ -96,45 +100,39 @@ tailoredGlasso <- function(x, prior.matrix, ebic.gamma = 0, k.max = 100, stars.t
 
   # Check that the prior matrix has elements in [0,1].
   if (max(prior.matrix) > 1 | min(prior.matrix) < 0) {
-    cat("Error: the elements in prior.matrix must be between 0 and 1. \n")
-    return()
+    stop("the elements in prior.matrix must be between 0 and 1. \n")
   }
   # Check that w0 has a valid value if provided.
   if (!is.null(w0)) {
     if (w0 < 0 | w0 > 1) {
-      cat("Error: w0 must be between 0 and 1. \n")
-      return()
+      stop("w0 must be between 0 and 1. \n")
     }
     else {
-      cat("w0 has been provided, so it will not be selected by tailoredGlasso. \n")
+      if (verbose) cat("w0 has been provided, so it will not be selected by tailoredGlasso. \n")
     }
   }
   # Check that k has a valid value if provided.
   if (!is.null(k)) {
     if (k < 0) {
-      cat("Error: k cannot be negative. \n")
-      return()
+      stop("k cannot be negative. \n")
     }
   }
   # Check that lambda.opt has a valid value if provided.
   if (!is.null(lambda.opt)) {
     if (lambda.opt < 0) {
-      cat("Error: lambda.opt cannot be negative. \n")
-      return()
+      stop("lambda.opt cannot be negative. \n")
     }
     else {
-      cat("lambda.opt has been provided, so it will not be selected by tailoredGlasso. \n")
+      if (verbose) cat("lambda.opt has been provided, so it will not be selected by tailoredGlasso. \n")
     }
   }
   # Check that ebic.gamma has a valid value
   if (ebic.gamma < 0) {
-    cat("Warning: ebic.gamma cannot have a negative value. Setting ebic.gamma = 0. \n")
-    ebic.gamma <- 0
+    stop("ebic.gamma cannot have a negative value. \n")
   }
   # Check that k.max has a valid value
   if (k.max < 5) {
-    cat("Warning: larger k.max should be considered for appropriate selection. Setting k.max = 50. \n")
-    k.max <- 50
+    stop("larger k.max should be considered for appropriate selection. Try k.max = 50. \n")
   }
   # Check if the provided matrix is a data matrix or covariance matrix.
   if (!isSymmetric(x)) {
@@ -145,19 +143,17 @@ tailoredGlasso <- function(x, prior.matrix, ebic.gamma = 0, k.max = 100, stars.t
   else {
     cov.mat <- x
     if (is.null(lambda.opt)) {
-      cat("Error: Penalty parameter selection for the unweighted graphical lasso graph cannot be performed when x is a covariance matrix. \n")
-      return()
+      stop("penalty parameter selection for the unweighted graphical lasso graph cannot be performed when x is a covariance matrix. \n")
     }
     if (is.null(n)) {
-      cat("Error: n must be provided when x is a covariance matrix. \n")
-      return()
+      stop("n must be provided when x is a covariance matrix. \n")
     }
   }
   p <- nrow(cov.mat)
 
   # Scale the data if asked to.
   if (scale) {
-    cat("Scaling data...\n")
+    if (verbose) cat("Scaling data...\n")
     cov.mat <- stats::cov2cor(cov.mat)
     x <- scale(x)
   }
@@ -169,15 +165,15 @@ tailoredGlasso <- function(x, prior.matrix, ebic.gamma = 0, k.max = 100, stars.t
 
   # If the optimal penalty parameter lambda.opt for the unweighted graph is not provided, select it by StARS.
   if (is.null(lambda.opt)) {
-    cat("Selecting lambda for the unweighted graph...\n")
+    if (verbose) cat("Selecting lambda for the unweighted graph...\n")
     fit.huge <- huge::huge(x, method = "glasso", nlambda = 35, verbose = F)
     fit.stars <- huge::huge.select(fit.huge, criterion = "stars", stars.thresh, verbose = F)
     lambda.opt <- fit.stars$opt.lambda
   }
 
-  # If a k is provided, no selection routine is required.
+  # If k is provided, no selection routine is required.
   if (!is.null(k)) {
-    cat("Since k is provided, its value will not be selected by tailoredGlasso. \n")
+    if (verbose) cat("Since k is provided, its value will not be selected by tailoredGlasso. \n")
     ans <- list()
     fit.w <- tailoredGlasso_given_k(lambda.opt, cov.mat, prior.matrix, k, p, w0)
     theta.est <- fit.w[[1]]$wi
@@ -188,8 +184,10 @@ tailoredGlasso <- function(x, prior.matrix, ebic.gamma = 0, k.max = 100, stars.t
     ans$k <- ans$k.opt <- k
     ans$sparsity <- ans$opt.sparsity <- tailoredGlasso::sparsity(theta.est != 0)
     ans$lambda.common <- fit.w$lambda
-    ans$loglikelihoods <- tailoredGlasso::gaussianloglik(cov.mat, theta.est, n)
+    ans$loglikelihoods <- ans$opt.loglikelihood <- tailoredGlasso::gaussianloglik(cov.mat, theta.est, n)
     ans$thetas <- ans$theta.opt <- theta.est
+    ans$w0 <- w0
+    ans$lambda.glasso <- lambda.opt
     return(ans)
   }
 
@@ -200,7 +198,7 @@ tailoredGlasso <- function(x, prior.matrix, ebic.gamma = 0, k.max = 100, stars.t
   lambdas <- rep(0, length(k_vals))
 
   # Fit models, one for each value of k:
-  cat("Selecting k...\n")
+  if (verbose) cat("Selecting k...\n")
   for (i in 1:length(k_vals)) {
     # Logistic transformation of the prior weights.
     weights <- matrix(1 - stats::plogis(prior.matrix, location = w0, scale = 1 / k_vals[i]), nrow = p, byrow = T)
@@ -233,6 +231,9 @@ tailoredGlasso <- function(x, prior.matrix, ebic.gamma = 0, k.max = 100, stars.t
   ans$loglikelihoods <- likelihoods
   ans$thetas <- theta.hats
   ans$theta.opt <- theta.hats[, , which.min(ebic)]
+  ans$w0 <- w0
+  ans$opt.loglikelihood <- likelihoods[which.min(ebic)]
+  ans$lambda.glasso <- lambda.opt
   return(ans)
 }
 

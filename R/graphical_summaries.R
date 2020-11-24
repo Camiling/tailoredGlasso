@@ -33,6 +33,8 @@
 #' matrix.distance.simple(prec.mat.1, prec.mat.2)
 matrix.distance.simple <- function(mat1, mat2) {
   p <- nrow(mat1)
+  if (mean(dim(mat1) == dim(mat2)) != 1) stop("matrices must have the same dimension")
+  if (any(diag(mat1) == 0) | any(diag(mat2) == 0)) stop("diagonal elements of precision matrices cannot be zero")
   # Disregard almost-zero entries:
   mat1[which(abs(mat1) < 10^(-4), arr.ind = T)] <- 0
   mat2[which(abs(mat2) < 10^(-4), arr.ind = T)] <- 0
@@ -40,7 +42,7 @@ matrix.distance.simple <- function(mat1, mat2) {
   m2 <- cov2cor(as.matrix(Matrix::forceSymmetric(mat2)))
   observed.dist <- sum(abs(abs(m1) - abs(m2)))
   expected.dist <- (sum(abs(m1)) + sum(abs(m2)) - 2 * p)
-  if (expected.dist == 0) {
+  if (expected.dist == 0) { # No edges in either graph.
     mat.dist <- 0
   }
   else {
@@ -77,11 +79,13 @@ matrix.distance.simple <- function(mat1, mat2) {
 #' dat <- huge::huge.generator(n = n, d = p, graph = "scale-free")
 #' sparsity(dat$theta)
 sparsity <- function(g) {
+  if (nrow(g) != ncol(g)) stop("adjacency matrix must be square.")
   g <- g + 0
   p <- dim(g)[1]
-  if (g[1, 1] == 0) {
+  if (g[1, 1] == 0) { # If diagonal elements are not given, do not subtract p.
     return(sum(g != 0) / (p^2 - p))
-  } else {
+  }
+  else {
     return((sum(g != 0) - p) / (p^2 - p))
   }
 }
@@ -115,6 +119,10 @@ sparsity <- function(g) {
 #' gaussianloglik(var(dat$data), prec.mat, n)
 #' @keywords internal
 gaussianloglik <- function(sample.cov, theta, n) {
+  if (mean(dim(sample.cov) == dim(theta)) != 1) stop("matrices must have the same dimension")
+  if (det(theta) <= 0) stop("precision matrix must be positive definite.")
+  if (!isSymmetric(sample.cov)) stop("sample covariance matrix must be symmetric")
+  if (n <= 0) stop("number of observations n must be positive")
   p <- nrow(theta)
   return(-p * n * log(2 * pi) / 2 + n * log(det(theta)) / 2 -
     n * sum(diag(sample.cov %*% theta)) / 2)
@@ -162,7 +170,7 @@ gaussianAIC <- function(sample.cov, theta, n) {
 #' @param sample.cov The sample covariance matrix of the observed data.
 #' @param theta The estimated precision matrix.
 #' @param n  The number of observations.
-#' @param gamma  The value of the additional edge penalty parameter \eqn{\gamma} to use in the eBIC.
+#' @param gamma  The value of the additional edge penalty parameter \eqn{\gamma} to use in the eBIC. Default value is \eqn{0}.
 #'
 #' @seealso \code{\link{tailoredGlasso}}
 #'
@@ -182,7 +190,12 @@ gaussianAIC <- function(sample.cov, theta, n) {
 #' dat <- huge::huge.generator(n = n, d = p, graph = "scale-free")
 #' prec.mat <- dat$omega # true precision matrix
 #' eBIC(var(dat$data), prec.mat, n, gamma = 0.2)
-eBIC <- function(sample.cov, theta, n, gamma) {
+eBIC <- function(sample.cov, theta, n, gamma = 0) {
+  if (mean(dim(sample.cov) == dim(theta)) != 1) stop("matrices must have the same dimension")
+  if (det(theta) <= 0) stop("precision matrix must be positive definite.")
+  if (!isSymmetric(sample.cov)) stop("sample covariance matrix must be symmetric")
+  if (n <= 0) stop("number of observations n must be positive")
+  if (gamma < 0) stop("gamma cannot be negative in eBIC")
   p <- nrow(theta)
   theta2 <- theta
   diag(theta2) <- rep(0, p)
@@ -227,6 +240,8 @@ eBIC <- function(sample.cov, theta, n, gamma) {
 #' prec.mat.2[which(abs(prec.mat.2) < 1.5 & !diag(ncol(prec.mat.2)))] <- 0
 #' confusion.matrix(prec.mat.1 != 0, prec.mat.2 != 0)
 confusion.matrix <- function(g, g.hat) {
+  if (mean(dim(g[, ]) == dim(g.hat[, ])) != 1) stop("matrices must have the same dimension")
+  if (mean((g[, ] + 0) %in% c(0, 1)) != 1 | mean((g.hat[, ] + 0) %in% c(0, 1)) != 1) stop("g and g.hat must be adjacency matrices with elements in {0,1}")
   p <- nrow(g[, ])
   g <- g[, ]
   g.hat <- g.hat[, ]

@@ -53,6 +53,8 @@ Object of class \code{"list"}. Contains the following items:
 \item{sparsity}{The sparsities of the models corresponding to different \eqn{k}.}
 \item{loglikelihoods}{The log likelihood values of the models corresponding to different \eqn{k}.}
 \item{thetas}{The estimated precision matrices corresponding to different \eqn{k}.}
+\item{w0}{The sigmoid midpoint used.}
+\item{opt.loglikelihood}{The log likelihood value of the selected precision matrix.}
 }
 }
 \description{
