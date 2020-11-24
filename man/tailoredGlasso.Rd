@@ -14,8 +14,8 @@ tailoredGlasso(
   w0 = NULL,
   k = NULL,
   lambda.opt = NULL,
-  scale = F,
-  verbose = T
+  scale = FALSE,
+  verbose = TRUE
 )
 }
 \arguments{
@@ -38,6 +38,8 @@ tailoredGlasso(
 \item{lambda.opt}{If provided, the optimal \eqn{\lambda} for the unweighted graph. If not provided, it will be selected by StARS.}
 
 \item{scale}{If \code{scale=TRUE}, all variables will be scaled. Default value is \code{FALSE}.}
+
+\item{verbose}{If \code{verbose = FALSE}, tracing information printing is disabled. The default value is \code{TRUE}.}
 }
 \value{
 Object of class \code{"list"}. Contains the following items:
@@ -55,6 +57,7 @@ Object of class \code{"list"}. Contains the following items:
 \item{thetas}{The estimated precision matrices corresponding to different \eqn{k}.}
 \item{w0}{The sigmoid midpoint used.}
 \item{opt.loglikelihood}{The log likelihood value of the selected precision matrix.}
+\item{lambda.glasso}{The value of \eqn{\lambda} selected for the unweighted graphical lasso graph.}
 }
 }
 \description{
@@ -65,7 +68,8 @@ The tailored graphical lasso is an extension of the weighted graphical lasso for
 }
 \examples{
 
-# example 1: simple example where the prior weight matrix is unrelated to the data of interest.
+# example 1: simple example where the prior weight matrix is
+# unrelated to the data of interest.
 # generate data and prior matrix
 set.seed(123)
 x <- matrix(rnorm(40 * 20), ncol = 20)
@@ -78,21 +82,23 @@ res$opt.sparsity # the sparsity of the estimated precision matrix.
 
 # example 2: scaling the data
 set.seed(123)
-res <- tailoredGlasso(x, prior.mat, scale = T)
+res <- tailoredGlasso(x, prior.mat, scale = TRUE)
 
-# example 3: scale-free data where prior weight matrix is highly informative for the data of interest.
+# example 3: scale-free data where prior weight matrix is
+# highly informative for the data of interest.
 set.seed(123)
 n <- 80
 p <- 100
 dat <- huge::huge.generator(n = n, d = p, graph = "scale-free")
 prec.mat <- dat$omega # true precision matrix
 prior.mat <- abs(cov2cor(prec.mat))
-res <- tailoredGlasso(dat$data, prior.mat, scale = T)
+res <- tailoredGlasso(dat$data, prior.mat, scale = TRUE)
 res$k.opt
 precision(abs(prec.mat) > 1e-7, res$theta.opt != 0)
 # k is chosen very large, high precision.
 
-# example 4: scale-free data where prior weight matrix is completely uninformative for the data of interest.
+# example 4: scale-free data where prior weight matrix is
+#  completely uninformative for the data of interest.
 # Create a completely unrealted prior data set
 set.seed(123)
 n <- 80
@@ -101,7 +107,7 @@ dat <- huge::huge.generator(n = n, d = p, graph = "scale-free")
 dat.prior <- huge::huge.generator(n = n, d = p, graph = "scale-free")
 prec.mat.prior <- dat.prior$omega # true precision matrix
 prior.mat <- abs(cov2cor(prec.mat.prior))
-res <- tailoredGlasso(dat$data, prior.mat, scale = T)
+res <- tailoredGlasso(dat$data, prior.mat, scale = TRUE)
 res$k.opt
 precision(abs(dat$omega) > 1e-7, res$theta.opt != 0)
 # k is chosen to be very small, lower precision as less useful prior information.

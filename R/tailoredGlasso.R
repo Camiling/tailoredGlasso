@@ -24,6 +24,7 @@
 #'
 #' @param stars.thresh The variability threshold to use in the StARS selection of \eqn{\lambda} for the unweighted graph if \code{lambda.opt=NULL}.The default value is \eqn{0.05}. Will also be used to determine the sigmoid midpoint if \code{w0=NULL}.
 #'
+#' @param verbose If \code{verbose = FALSE}, tracing information printing is disabled. The default value is \code{TRUE}.
 #'
 #'
 #' @return Object of class \code{"list"}. Contains the following items:
@@ -56,7 +57,8 @@
 #'
 #' @examples
 #'
-#' # example 1: simple example where the prior weight matrix is unrelated to the data of interest.
+#' # example 1: simple example where the prior weight matrix is
+#' # unrelated to the data of interest.
 #' # generate data and prior matrix
 #' set.seed(123)
 #' x <- matrix(rnorm(40 * 20), ncol = 20)
@@ -69,21 +71,23 @@
 #'
 #' # example 2: scaling the data
 #' set.seed(123)
-#' res <- tailoredGlasso(x, prior.mat, scale = T)
+#' res <- tailoredGlasso(x, prior.mat, scale = TRUE)
 #'
-#' # example 3: scale-free data where prior weight matrix is highly informative for the data of interest.
+#' # example 3: scale-free data where prior weight matrix is
+#' # highly informative for the data of interest.
 #' set.seed(123)
 #' n <- 80
 #' p <- 100
 #' dat <- huge::huge.generator(n = n, d = p, graph = "scale-free")
 #' prec.mat <- dat$omega # true precision matrix
 #' prior.mat <- abs(cov2cor(prec.mat))
-#' res <- tailoredGlasso(dat$data, prior.mat, scale = T)
+#' res <- tailoredGlasso(dat$data, prior.mat, scale = TRUE)
 #' res$k.opt
 #' precision(abs(prec.mat) > 1e-7, res$theta.opt != 0)
 #' # k is chosen very large, high precision.
 #'
-#' # example 4: scale-free data where prior weight matrix is completely uninformative for the data of interest.
+#' # example 4: scale-free data where prior weight matrix is
+#' #  completely uninformative for the data of interest.
 #' # Create a completely unrealted prior data set
 #' set.seed(123)
 #' n <- 80
@@ -92,11 +96,11 @@
 #' dat.prior <- huge::huge.generator(n = n, d = p, graph = "scale-free")
 #' prec.mat.prior <- dat.prior$omega # true precision matrix
 #' prior.mat <- abs(cov2cor(prec.mat.prior))
-#' res <- tailoredGlasso(dat$data, prior.mat, scale = T)
+#' res <- tailoredGlasso(dat$data, prior.mat, scale = TRUE)
 #' res$k.opt
 #' precision(abs(dat$omega) > 1e-7, res$theta.opt != 0)
 #' # k is chosen to be very small, lower precision as less useful prior information.
-tailoredGlasso <- function(x, prior.matrix, ebic.gamma = 0, k.max = 100, stars.thresh = 0.05, n = NULL, w0 = NULL, k = NULL, lambda.opt = NULL, scale = F, verbose = T) {
+tailoredGlasso <- function(x, prior.matrix, ebic.gamma = 0, k.max = 100, stars.thresh = 0.05, n = NULL, w0 = NULL, k = NULL, lambda.opt = NULL, scale = FALSE, verbose = TRUE) {
 
   # Check that the prior matrix has elements in [0,1].
   if (max(prior.matrix) > 1 | min(prior.matrix) < 0) {
@@ -209,7 +213,7 @@ tailoredGlasso <- function(x, prior.matrix, ebic.gamma = 0, k.max = 100, stars.t
     # Save estimated precision matrix.
     theta.hats[, , i] <- fit.w$wi
     # Save the Multivariate Gaussian log likelihood.
-    likelihoods[i] <- tailoredGlasso:::gaussianloglik(cov.mat, fit.w$wi, n)
+    likelihoods[i] <- tailoredGlasso::gaussianloglik(cov.mat, fit.w$wi, n)
     # Print how far we have come last time the percentage done is dividable by 10.
     if (verbose) {
       done <- round(100 * i / length(k_vals))

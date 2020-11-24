@@ -3,7 +3,6 @@ library(tailoredGlasso)
 context("test-tailoredGlasso.R")
 
 test_that("Test tailoredGlasso", {
-
   # Example: Highly informative prior.
   set.seed(123)
   n <- 80

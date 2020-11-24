@@ -1,5 +1,5 @@
 Package: tailoredGlasso
-Title: Gaussian graphical models with the tailored graphical lasso. 
+Title: Gaussian graphical models with the tailored graphical lasso
 Description: The tailored graphical lasso is an extension of the weighted graphical lasso for graph reconstruction. 
         The objective is to get better utilisation of the available prior information, while ensuring that the introduction of prior information may 
         not decrease the accuracy of the resulting inferred graph. The method takes a data matrix (or a covariance matrix) for which a weighted graphical
@@ -8,7 +8,7 @@ Version: 0.0.0.9000
 Authors@R: 
     person("Camilla", "Lingjaerde", email = "camilla.lingjaerde@mrc-bsu.cam.ac.uk", role = c("cre", "aut"), comment = c(ORCID = "0000-0003-2701-5686"))
 URL: https://github.com/Camiling/TailoredGlasso
-License: use_mit_license()
+License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
 Language: en-US
@@ -26,5 +26,6 @@ Suggests:
     knitr,
     GGally, 
     network, 
-    sna
+    sna, 
+    testthat
 VignetteBuilder: knitr

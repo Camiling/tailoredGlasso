@@ -4,7 +4,7 @@
 \alias{eBIC}
 \title{Calculate the extended BIC (eBIC) score of an estimated precision matrix}
 \usage{
-eBIC(sample.cov, theta, n, gamma)
+eBIC(sample.cov, theta, n, gamma = 0)
 }
 \arguments{
 \item{sample.cov}{The sample covariance matrix of the observed data.}
@@ -13,7 +13,7 @@ eBIC(sample.cov, theta, n, gamma)
 
 \item{n}{The number of observations.}
 
-\item{gamma}{The value of the additional edge penalty parameter \eqn{\gamma} to use in the eBIC.}
+\item{gamma}{The value of the additional edge penalty parameter \eqn{\gamma} to use in the eBIC. Default value is \eqn{0}.}
 }
 \value{
 The eBIC score.

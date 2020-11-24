@@ -38,8 +38,8 @@ matrix.distance.simple <- function(mat1, mat2) {
   # Disregard almost-zero entries:
   mat1[which(abs(mat1) < 10^(-4), arr.ind = T)] <- 0
   mat2[which(abs(mat2) < 10^(-4), arr.ind = T)] <- 0
-  m1 <- cov2cor(as.matrix(Matrix::forceSymmetric(mat1)))
-  m2 <- cov2cor(as.matrix(Matrix::forceSymmetric(mat2)))
+  m1 <- stats::cov2cor(as.matrix(Matrix::forceSymmetric(mat1)))
+  m2 <- stats::cov2cor(as.matrix(Matrix::forceSymmetric(mat2)))
   observed.dist <- sum(abs(abs(m1) - abs(m2)))
   expected.dist <- (sum(abs(m1)) + sum(abs(m2)) - 2 * p)
   if (expected.dist == 0) { # No edges in either graph.
