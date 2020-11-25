@@ -9,7 +9,8 @@ tailoredGlasso
 <!-- IF ON CRAN [![CRAN_Status_Badge](https://www.r-pkg.org/badges/version-last-release/shapr)]
 [![CRAN_Downloads_Badge](https://cranlogs.r-pkg.org/badges/grand-total/shapr)]---->
 <!--WHEN TESTING IS INCLUDED [![R build status](https://github.com/NorskRegnesentral/shapr/workflows/R-CMD-check/badge.svg)] --->
-<!--PAPER HERE [![DOI](https://joss.theoj.org/papers/10.21105/joss.02027/status.svg)]---->
+<!--PAPER HERE [![DOI](https://joss.theoj.org/papers/10.21105/joss.02027/status.svg)]
+[![Codecov test coverage](https://codecov.io/gh/Camiling/tailoredGlasso/branch/master/graph/badge.svg)](https://codecov.io/gh/Camiling/tailoredGlasso?branch=master)---->
 This package implements the tailored graphical lasso for data integration in Gaussian graphical models. The tailored graphical lasso is an extension of the weighted graphical lasso (Friedman, Hastie, and Tibshirani (2008), Y. Li and Jackson (2015)) for graph reconstruction. The objective is to get better utilisation of the available prior information, while ensuring that the introduction of prior information may not decrease the accuracy of the resulting inferred graph. The method takes a data matrix (or a covariance matrix) for which a weighted graphical lasso graph is to be inferred, as well as a prior weight matrix, and transforms the prior weights to more appropriate values with the logistic function. The parameters of the weight transformation are chosen with a data-driven approach.
 
 Installation
