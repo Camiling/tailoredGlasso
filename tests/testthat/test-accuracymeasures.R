@@ -3,12 +3,11 @@ library(tailoredGlasso)
 context("test-accuracymeasures.R")
 
 
-
 test_that("Test confusion.matrix gives valid results", {
 
   # Example: Two unrelated graphs
-  n <- 80
-  p <- 100
+  n <- 30
+  p <- 10
   dat <- huge::huge.generator(n = n, d = p, graph = "scale-free", verbose = F)
   prec.mat <- dat$omega # true precision matrix
   adj.mat <- abs(prec.mat) >= 1e-8 # Avoid rounding errors.
@@ -22,14 +21,13 @@ test_that("Test confusion.matrix gives valid results", {
   expect_true(confmat[1, 2] >= 0) # Value larger or equal to 0.
   expect_true(confmat[2, 1] >= 0) # Value larger or equal to 0.
   expect_true(confmat[2, 2] >= 0) # Value larger or equal to 0.
-
 })
 
 test_that("confusion.matrix results in a 2 times 2 matrix", {
 
   # Example: Two unrelated graphs
-  n <- 80
-  p <- 100
+  n <- 30
+  p <- 10
   dat <- huge::huge.generator(n = n, d = p, graph = "scale-free", verbose = F)
   prec.mat <- dat$omega # true precision matrix
   adj.mat <- abs(prec.mat) >= 1e-8 # Avoid rounding errors.
@@ -39,16 +37,14 @@ test_that("confusion.matrix results in a 2 times 2 matrix", {
   confmat <- tailoredGlasso::confusion.matrix(adj.mat, adj.mat.2)
 
   # Tests -----------
-  #testthat::expect_equal(class(confmat), "matrix") # Test that a matrix is returned.
   testthat::expect_equal(dim(confmat), c(2, 2)) # Check that result has correct dimension.
-
 })
 
 test_that("confusion.matrix gives right answer for identical matrices", {
 
   # Example: Two unrelated graphs
-  n <- 80
-  p <- 100
+  n <- 30
+  p <- 10
   dat <- huge::huge.generator(n = n, d = p, graph = "scale-free", verbose = F)
   prec.mat <- dat$omega # true precision matrix
   adj.mat <- abs(prec.mat) >= 1e-8 # Avoid rounding errors.
@@ -59,14 +55,13 @@ test_that("confusion.matrix gives right answer for identical matrices", {
 
   # Test that results are correct for identical precision matrices.
   expect_equal(tailoredGlasso::confusion.matrix(adj.mat, adj.mat), matrix(c((sum(adj.mat != 0) - p) / 2, 0, 0, sum(adj.mat == 0) / 2), ncol = 2, byrow = T))
-
 })
 
 test_that("confusion.matrix sums up rows and cols correctly", {
 
   # Example: Two unrelated graphs
-  n <- 80
-  p <- 100
+  n <- 30
+  p <- 10
   dat <- huge::huge.generator(n = n, d = p, graph = "scale-free", verbose = F)
   prec.mat <- dat$omega # true precision matrix
   adj.mat <- abs(prec.mat) >= 1e-8 # Avoid rounding errors.
@@ -80,14 +75,13 @@ test_that("confusion.matrix sums up rows and cols correctly", {
   expect_equal(confmat[1, 1] + confmat[1, 2], (sum(adj.mat.2 != 0) - p) / 2) # Number of edges in adj.mat.2
   expect_equal(confmat[1, 2] + confmat[2, 2], sum(adj.mat == 0) / 2) # Number of 'no edges' in adj.mat
   expect_equal(confmat[2, 1] + confmat[2, 2], sum(adj.mat.2 == 0) / 2) # Number of 'no edges' in adj.mat
-
 })
 
 test_that("confusion.matrix throws error", {
 
   # Example: Two unrelated graphs
-  n <- 80
-  p <- 100
+  n <- 30
+  p <- 10
   dat <- huge::huge.generator(n = n, d = p, graph = "scale-free", verbose = F)
   prec.mat <- dat$omega # true precision matrix
   adj.mat <- abs(prec.mat) >= 1e-8 # Avoid rounding errors.
@@ -103,8 +97,8 @@ test_that("confusion.matrix throws error", {
 test_that("Test precision", {
 
   # Example: Two unrelated graphs
-  n <- 80
-  p <- 100
+  n <- 30
+  p <- 10
   dat <- huge::huge.generator(n = n, d = p, graph = "scale-free", verbose = F)
   prec.mat <- dat$omega # true precision matrix
   adj.mat <- abs(prec.mat) >= 1e-8 # Avoid rounding errors.
@@ -135,8 +129,8 @@ test_that("Test precision", {
 test_that("Test recall", {
 
   # Example: Two unrelated graphs
-  n <- 80
-  p <- 100
+  n <- 30
+  p <- 10
   dat <- huge::huge.generator(n = n, d = p, graph = "scale-free", verbose = F)
   prec.mat <- dat$omega # true precision matrix
   adj.mat <- abs(prec.mat) >= 1e-8 # Avoid rounding errors.
@@ -165,8 +159,8 @@ test_that("Test recall", {
 test_that("Test matrix.distance.simple", {
 
   # Example: Two unrelated graphs
-  n <- 80
-  p <- 100
+  n <- 30
+  p <- 10
   dat <- huge::huge.generator(n = n, d = p, graph = "scale-free", verbose = F)
   prec.mat <- dat$omega # true precision matrix
   dat.2 <- huge::huge.generator(n = n, d = p, graph = "scale-free", verbose = F)

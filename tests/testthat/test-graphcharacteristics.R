@@ -5,8 +5,8 @@ context("test-graphcharacteristics.R")
 test_that("Test sparsity", {
 
   # Example
-  n <- 80
-  p <- 100
+  n <- 30
+  p <- 10
   dat <- huge::huge.generator(n = n, d = p, graph = "scale-free", verbose = F)
   prec.mat <- dat$omega # true precision matrix
   adj.mat <- abs(prec.mat) >= 1e-8 # Avoid rounding errors.
@@ -31,8 +31,8 @@ test_that("Test gaussianloglik", {
 
   # Example
   set.seed(123)
-  n <- 80
-  p <- 100
+  n <- 30
+  p <- 10
   dat <- huge::huge.generator(n = n, d = p, graph = "scale-free", verbose = F)
   cov.mat <- cov(dat$data)
   prec.mat <- dat$omega # true precision matrix
@@ -61,8 +61,8 @@ test_that("Test gaussianAIC", {
 
   # Example
   set.seed(123)
-  n <- 80
-  p <- 100
+  n <- 30
+  p <- 10
   dat <- huge::huge.generator(n = n, d = p, graph = "scale-free", verbose = F)
   cov.mat <- cov(dat$data)
   prec.mat <- dat$omega # true precision matrix
@@ -91,8 +91,8 @@ test_that("Test eBIC", {
 
   # Example
   set.seed(123)
-  n <- 80
-  p <- 100
+  n <- 30
+  p <- 10
   dat <- huge::huge.generator(n = n, d = p, graph = "scale-free", verbose = F)
   cov.mat <- cov(dat$data)
   prec.mat <- dat$omega # true precision matrix
