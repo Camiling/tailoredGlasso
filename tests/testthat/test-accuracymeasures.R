@@ -3,24 +3,6 @@ library(tailoredGlasso)
 context("test-accuracymeasures.R")
 
 
-test_that("confusion.matrix results a 2 times 2 matrix", {
-
-  # Example: Two unrelated graphs
-  n <- 80
-  p <- 100
-  dat <- huge::huge.generator(n = n, d = p, graph = "scale-free", verbose = F)
-  prec.mat <- dat$omega # true precision matrix
-  adj.mat <- abs(prec.mat) >= 1e-8 # Avoid rounding errors.
-  dat.2 <- huge::huge.generator(n = n, d = p, graph = "scale-free", verbose = F)
-  prec.mat.2 <- dat.2$omega # true precision matrix
-  adj.mat.2 <- abs(prec.mat.2) >= 1e-8 # Avoid rounding errors.
-  confmat <- tailoredGlasso::confusion.matrix(adj.mat, adj.mat.2)
-
-  # Tests -----------
-  expect_equal(class(confmat), "matrix") # Test that a matrix is returned.
-  expect_equal(dim(confmat), c(2, 2)) # Check that result has correct dimension.
-
-})
 
 test_that("Test confusion.matrix gives valid results", {
 
@@ -40,6 +22,25 @@ test_that("Test confusion.matrix gives valid results", {
   expect_true(confmat[1, 2] >= 0) # Value larger or equal to 0.
   expect_true(confmat[2, 1] >= 0) # Value larger or equal to 0.
   expect_true(confmat[2, 2] >= 0) # Value larger or equal to 0.
+
+})
+
+test_that("confusion.matrix results in a 2 times 2 matrix", {
+
+  # Example: Two unrelated graphs
+  n <- 80
+  p <- 100
+  dat <- huge::huge.generator(n = n, d = p, graph = "scale-free", verbose = F)
+  prec.mat <- dat$omega # true precision matrix
+  adj.mat <- abs(prec.mat) >= 1e-8 # Avoid rounding errors.
+  dat.2 <- huge::huge.generator(n = n, d = p, graph = "scale-free", verbose = F)
+  prec.mat.2 <- dat.2$omega # true precision matrix
+  adj.mat.2 <- abs(prec.mat.2) >= 1e-8 # Avoid rounding errors.
+  confmat <- tailoredGlasso::confusion.matrix(adj.mat, adj.mat.2)
+
+  # Tests -----------
+  testthat::expect_equal(class(confmat), "matrix") # Test that a matrix is returned.
+  testthat::expect_equal(dim(confmat), c(2, 2)) # Check that result has correct dimension.
 
 })
 
