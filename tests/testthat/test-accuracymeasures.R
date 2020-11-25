@@ -3,7 +3,7 @@ library(tailoredGlasso)
 context("test-accuracymeasures.R")
 
 
-test_that("Test confusion.matrix", {
+test_that("confusion.matrix results a 2 times 2 matrix", {
 
   # Example: Two unrelated graphs
   n <- 80
@@ -20,11 +20,59 @@ test_that("Test confusion.matrix", {
   expect_equal(class(confmat), "matrix") # Test that a matrix is returned.
   expect_equal(dim(confmat), c(2, 2)) # Check that result has correct dimension.
 
+})
+
+test_that("Test confusion.matrix gives valid results", {
+
+  # Example: Two unrelated graphs
+  n <- 80
+  p <- 100
+  dat <- huge::huge.generator(n = n, d = p, graph = "scale-free", verbose = F)
+  prec.mat <- dat$omega # true precision matrix
+  adj.mat <- abs(prec.mat) >= 1e-8 # Avoid rounding errors.
+  dat.2 <- huge::huge.generator(n = n, d = p, graph = "scale-free", verbose = F)
+  prec.mat.2 <- dat.2$omega # true precision matrix
+  adj.mat.2 <- abs(prec.mat.2) >= 1e-8 # Avoid rounding errors.
+  confmat <- tailoredGlasso::confusion.matrix(adj.mat, adj.mat.2)
+
   # Test that the results are valid
   expect_true(confmat[1, 1] >= 0) # Value larger or equal to 0.
   expect_true(confmat[1, 2] >= 0) # Value larger or equal to 0.
   expect_true(confmat[2, 1] >= 0) # Value larger or equal to 0.
   expect_true(confmat[2, 2] >= 0) # Value larger or equal to 0.
+
+})
+
+test_that("confusion.matrix gives right answer for identical matrices", {
+
+  # Example: Two unrelated graphs
+  n <- 80
+  p <- 100
+  dat <- huge::huge.generator(n = n, d = p, graph = "scale-free", verbose = F)
+  prec.mat <- dat$omega # true precision matrix
+  adj.mat <- abs(prec.mat) >= 1e-8 # Avoid rounding errors.
+  dat.2 <- huge::huge.generator(n = n, d = p, graph = "scale-free", verbose = F)
+  prec.mat.2 <- dat.2$omega # true precision matrix
+  adj.mat.2 <- abs(prec.mat.2) >= 1e-8 # Avoid rounding errors.
+  confmat <- tailoredGlasso::confusion.matrix(adj.mat, adj.mat.2)
+
+  # Test that results are correct for identical precision matrices.
+  expect_equal(tailoredGlasso::confusion.matrix(adj.mat, adj.mat), matrix(c((sum(adj.mat != 0) - p) / 2, 0, 0, sum(adj.mat == 0) / 2), ncol = 2, byrow = T))
+
+})
+
+test_that("confusion.matrix sums up rows and cols correctly", {
+
+  # Example: Two unrelated graphs
+  n <- 80
+  p <- 100
+  dat <- huge::huge.generator(n = n, d = p, graph = "scale-free", verbose = F)
+  prec.mat <- dat$omega # true precision matrix
+  adj.mat <- abs(prec.mat) >= 1e-8 # Avoid rounding errors.
+  dat.2 <- huge::huge.generator(n = n, d = p, graph = "scale-free", verbose = F)
+  prec.mat.2 <- dat.2$omega # true precision matrix
+  adj.mat.2 <- abs(prec.mat.2) >= 1e-8 # Avoid rounding errors.
+  confmat <- tailoredGlasso::confusion.matrix(adj.mat, adj.mat.2)
 
   # Test that sum of columns and rows are correct.
   expect_equal(confmat[1, 1] + confmat[2, 1], (sum(adj.mat != 0) - p) / 2) # Number of edges in adj.mat
@@ -32,8 +80,19 @@ test_that("Test confusion.matrix", {
   expect_equal(confmat[1, 2] + confmat[2, 2], sum(adj.mat == 0) / 2) # Number of 'no edges' in adj.mat
   expect_equal(confmat[2, 1] + confmat[2, 2], sum(adj.mat.2 == 0) / 2) # Number of 'no edges' in adj.mat
 
-  # Test that results are correct for identical precision matrices.
-  expect_equal(tailoredGlasso::confusion.matrix(adj.mat, adj.mat), matrix(c((sum(adj.mat != 0) - p) / 2, 0, 0, sum(adj.mat == 0) / 2), ncol = 2, byrow = T))
+})
+
+test_that("confusion.matrix throws error", {
+
+  # Example: Two unrelated graphs
+  n <- 80
+  p <- 100
+  dat <- huge::huge.generator(n = n, d = p, graph = "scale-free", verbose = F)
+  prec.mat <- dat$omega # true precision matrix
+  adj.mat <- abs(prec.mat) >= 1e-8 # Avoid rounding errors.
+  dat.2 <- huge::huge.generator(n = n, d = p, graph = "scale-free", verbose = F)
+  prec.mat.2 <- dat.2$omega # true precision matrix
+  adj.mat.2 <- abs(prec.mat.2) >= 1e-8 # Avoid rounding errors.
 
   # Test errors
   expect_error(tailoredGlasso::confusion.matrix(adj.mat, prec.mat.2)) # Not providing adjacency matric.
