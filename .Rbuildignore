@@ -2,5 +2,10 @@
 ^\.Rproj\.user$
 ^LICENSE\.md$
 ^README\.Rmd$
-
+^\.github$
+^NEWS\.Rmd$
+^CRAN-RELEASE$
+^LICENSE\.md$
+^\.github/workflows/R\.yaml$
+^\.github/workflows/pr-commands\.yaml$
 ^codecov\.yml$
