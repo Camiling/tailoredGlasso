@@ -21,6 +21,7 @@ library(tailoredGlasso)
  
 <!-- badges: start -->
 [![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
+[![codecov](https://codecov.io/gh/Camiling/tailoredGlasso/branch/master/graph/badge.svg?token=ZGD1X88OEA)](https://codecov.io/gh/Camiling/tailoredGlasso)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 <!-- badges: end -->
 

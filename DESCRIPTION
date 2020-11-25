@@ -21,11 +21,12 @@ Imports:
     glasso,
     Matrix
 Suggests:
-    igraph, 
+    igraph,
     mvtnorm,
     knitr,
-    GGally, 
-    network, 
-    sna, 
-    testthat
+    GGally,
+    network,
+    sna,
+    testthat,
+    covr
 VignetteBuilder: knitr

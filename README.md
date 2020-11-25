@@ -4,7 +4,7 @@ tailoredGlasso
 ==============
 
 <!-- badges: start -->
-[![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT) <!-- badges: end -->
+[![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental) [![codecov](https://codecov.io/gh/Camiling/tailoredGlasso/branch/master/graph/badge.svg?token=ZGD1X88OEA)](https://codecov.io/gh/Camiling/tailoredGlasso) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT) <!-- badges: end -->
 
 <!-- IF ON CRAN [![CRAN_Status_Badge](https://www.r-pkg.org/badges/version-last-release/shapr)]
 [![CRAN_Downloads_Badge](https://cranlogs.r-pkg.org/badges/grand-total/shapr)]---->
@@ -52,9 +52,6 @@ prec.mat <- dat$omega # true precision matrix
 prior.mat <- abs(cov2cor(prec.mat)) # the prior weights are the absolute values of the true partial correlations, thus very informative.
 # perform the tailored graphical lasso
 res <- tailoredGlasso(dat$data, prior.mat, scale = T, verbose = F)
-#> Scaling data...
-#> Selecting lambda for the unweighted graph...
-#> Selecting k...
 res$k.opt # k is chosen very large
 #> [1] 99
 adj.mat <- res$theta.opt != 0 # the adjacency matrix of the corresponding graph
@@ -71,9 +68,6 @@ dat.prior <- huge::huge.generator(n = n, d = p, graph = "scale-free", verbose = 
 prec.mat.prior <- dat.prior$omega # true precision matrix
 prior.mat <- abs(cov2cor(prec.mat.prior)) # the prior weights are the absolute values of completely unrelated partial correlations, thus completely uninformative.
 res <- tailoredGlasso(dat$data, prior.mat, scale = T, verbose = F)
-#> Scaling data...
-#> Selecting lambda for the unweighted graph...
-#> Selecting k...
 res$k.opt # very small k is chosen
 #> [1] 0.23
 adj.mat <- res$theta.opt != 0 # the adjacency matrix of the corresponding graph
