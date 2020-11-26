@@ -19,7 +19,8 @@ Imports:
     stats,
     huge,
     glasso,
-    Matrix
+    Matrix,
+    remotes
 Suggests:
     igraph,
     mvtnorm,
