@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
-tailoredGlasso
-==============
+tailoredGlasso <img src="man/figures/tailoredGlassoLogo.png" align="right" height="150"/>
+=========================================================================================
 
 <!-- badges: start -->
 [![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental) [![codecov](https://codecov.io/gh/Camiling/tailoredGlasso/branch/master/graph/badge.svg?token=ZGD1X88OEA)](https://codecov.io/gh/Camiling/tailoredGlasso) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT) [![R build status](https://github.com/Camiling/tailoredGlasso/workflows/R-CMD-check/badge.svg)](https://github.com/Camiling/tailoredGlasso/actions) <!-- badges: end -->

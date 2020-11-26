@@ -17,7 +17,7 @@ library(tailoredGlasso)
 ```
 
 
-# tailoredGlasso
+# tailoredGlasso <img src="man/figures/tailoredGlassoLogo.png" align="right" height="150"/>
  
 <!-- badges: start -->
 [![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
