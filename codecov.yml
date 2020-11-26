@@ -5,6 +5,9 @@ cache: packages
 after_success:
 - Rscript -e 'covr::codecov()'
 
+codecov:
+  token: ac9ec8da-cbdd-490a-b90e-fdfc5eabe41d
+
 coverage:
   status:
     project:
