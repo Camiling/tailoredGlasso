@@ -32,7 +32,7 @@ library(tailoredGlasso)
 
 > [Examples](#ex)
 
-> [Comparison to the graphical lasso and the weighted graphical lasso](#compare)
+<!-- [Comparison to the graphical lasso and the weighted graphical lasso](#compare) -->
 
 <a id="intro"></a>
 
@@ -86,19 +86,19 @@ Function Name                 Description
 
 Network models are popular tools for modelling interactions and associations. While the edges of correlation networks are indicative of direct associations, correlation is not a neccesary or suffient condition (@chen2018) for a direct association. In a conditional independence network, the effect of other variables (nodes) is adjusted for. In such a graph, there is an edge between two nodes if and only if there is a direct association between them when conditioning upon the rest of the variables in the graph.
 
-Inferring a conditional independence network from requires a measure of the conditional dependence between all pairs of nodes or variables. Given that each node is associated with a measurable *node attribute*, one possible approach is to assume a Gaussian graphical model, where the multivariate random vector $(X_1, \ldots, X_{p})^T$ of node attributes is assumed to be multivariate Gaussian with mean vector $\boldsymbol{\mu}$ covariance matrix $\boldsymbol{\Sigma}$. A conditional independence network may then be determined from the inverse covariance matrix, or *precision matrix*, $\boldsymbol{\Theta}=\boldsymbol{\Sigma}^{-1}$. Given the entries $\theta_{ij}$ of $\boldsymbol{\Theta}$, the conditional (or partial) correlation between nodes, or variables, $i$ and $j$ conditioned upon all others is given by 
+Inferring a conditional independence network requires a measure of the conditional dependence between all pairs of nodes or variables. Given that each node is associated with a measurable *node attribute*, one possible approach is to assume a Gaussian graphical model, where the multivariate random vector $(X_1, \ldots, X_{p})^T$ of node attributes is assumed to be multivariate Gaussian with mean vector $\boldsymbol{\mu}$ and covariance matrix $\boldsymbol{\Sigma}$. A conditional independence network may then be determined from the inverse covariance matrix, or *precision matrix*, $\boldsymbol{\Theta}=\boldsymbol{\Sigma}^{-1}$. Given the entries $\theta_{ij}$ of $\boldsymbol{\Theta}$, the conditional (or partial) correlation between nodes, or variables, $i$ and $j$ conditioned upon all others is given by 
 
 $$
 \rho_{ij\vert V\backslash \{i,j\} } = - \frac{\theta_{ij}}{\sqrt{\theta_{ii}\theta_{jj}}}
 $$
-where $V$ is the set of all node pairs. Since correlation equal to zero is equivalent to independence for Gaussian variables, a conditional independence graph may be constructed by determining the non-zero entries of the precision matrix $\boldsymbol{\Theta}$ and assigning edges to the corresponding node pairs. The resulting model is a \emph{Gaussian graphical model}, with the edges representing conditional dependence.
+where $V$ is the set of all node pairs. Since correlation equal to zero is equivalent to independence for Gaussian variables, a conditional independence graph may be constructed by determining the non-zero entries of the precision matrix $\boldsymbol{\Theta}$ and assigning edges to the corresponding node pairs. The resulting model is a *Gaussian graphical model*, with the edges representing conditional dependence.
 
-Due to the high-dimensional problem frequently encountered in real-life data, where the number of observations $n$ is much smaller than the number of variables to estimate (in this case elements in $\boldsymbol{\Theta}$), the sample covariance matrix is often not of full rank. Thus, the inverse covariance matrix is often not possible to compute directly, and alternative approaches are neccesary.  
+Due to the high-dimensional problem frequently encountered in real-life data, where the number of observations $n$ is much smaller than the number of parameters to estimate (in this case elements in $\boldsymbol{\Theta}$), the sample covariance matrix is often not of full rank. Thus, the inverse covariance matrix is often not possible to compute directly, and alternative approaches are neccessary.  
 
 
 ## The graphical lasso
 
-The *sparsity* of a graph is the number of edges divided by the maximal number of edges the graph can have. If the sparsity of a graph is suffciently small, $\boldsymbol{\Theta}$ has enough zero elements to be of full rank and thus invertible and well defined. We then say that the graph, or precision matrix, is sparse.
+The *sparsity* of a graph is the number of edges divided by the maximal number of edges the graph can have. If the sparsity of a graph is sufficiently small, $\boldsymbol{\Theta}$ has enough zero elements to be of full rank and thus invertible and well defined. We then say that the graph, or precision matrix, is sparse.
 
 The graphical lasso performs sparse precision matrix estimation by imposing an $L_1$ penalty on the matrix entries (@Friedman08). The graphical lasso aims to solve the penalized log-likelihood problem
 
@@ -133,7 +133,7 @@ knitr::include_graphics("../man/figures/logistic.png")
 
 
 
-Evidently, for $k=0$ the function maps all weights to the same value, and we just get the ordinary unweighted graphical lasso. As $k$ grows, the sigmoid function becomes more step-like. For $k=40$ it is very near being a step function and for $k=200$ it essentially is one. The weights will then all be mapped to either 0 or 1, depending on whether they are above or below $w_0$. The transformed weights will always be mapped into $[0,1]$, as required for the weights in the weighted graphical lasso. The logistic function never becomes exactly the identity function $g_k(w) = w$ that would map all weights to themselves corresponding to the ordinary weighted graphical lasso. As we see, it does however approximate the identity function well for $k=4$. Thus, the graphical lasso and weighted graphical lasso can be considered special cases of the tailored graphical lasso, and the selected $k$ measures the usefulness of the prior information.
+Evidently, for $k=0$ the function maps all weights to the same value, and we just get the ordinary unweighted graphical lasso. As $k$ grows, the sigmoid function becomes more step-like. For $k=40$ it is very near being a step function and for $k=200$ it essentially is one. The weights will then all be mapped close to either 0 or 1, depending on whether they are above or below $w_0$. The transformed weights will always be mapped into $[0,1]$, as required for the weights in the weighted graphical lasso. The logistic function never becomes exactly the identity function $g_k(w) = w$ that would map all weights to themselves corresponding to the ordinary weighted graphical lasso. As we see, it does however approximate the identity function well for $k=4$. Thus, the graphical lasso and weighted graphical lasso can be considered special cases of the tailored graphical lasso, and the selected $k$ measures the usefulness of the prior information.
 
 
 The tailored graphical lasso begins by selecting the total amount of penalization to be used on the elements of $\boldsymbol{\Theta}$. This amount is selected without taking the prior weight matrix into account, using the sparsity selection method StARS (@Liu10) with the unweighted graphical lasso to find a common penalty parameter $\lambda$. StARS is used as it is a stable criterion for graph sparsity selection \cite{Liu10}. By preserving the amount of penalty, we achieve similar sparsity for each $k$ without having to repeatedly perform StARS, which is computationally exhaustive.
@@ -159,7 +159,7 @@ In the tailored graphical lasso, a small selected $k$ can be interpreted as an e
 
 The main function `tailoredGlasso` takes an $n\times p$ data matrix and a $p\times p$ prior weight matrix, and uses the tailored graphical lasso to estimate the inverse covariance matrix (precision matrix) of the data. A graph structure can then be determined by letting there be an edge between all pairs of variables, or nodes, $(i,j)$ whose corresponding element in the estimated precision matrix is non-zero. 
 
-`tailoredGlasso` selects the steepness parameter $k$ in the logstic function used to transformed the weights with a data-driven approach. Using the eBIC criterion for the selection, the method ensures that prior information is only included to the extent where it improves the model fit. 
+`tailoredGlasso` selects the steepness parameter $k$ in the logistic function used to transform the weights with a data-driven approach. Using the eBIC criterion for the selection, the method ensures that prior information is only included to the extent that it improves the model fit. 
 
 Below we show one example where the prior weight matrix is very informative for the data of interest, and one where the prior weight matrix is completely uninformative for the data. In the first case, $k$ is selected to very big and we get a high precision considering the high-dimensionality of the problem. In the latter case, $k$ is selected to be very small and hardly any prior information is incorporated into the model. 
 
