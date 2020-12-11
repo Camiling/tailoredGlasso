@@ -19,7 +19,7 @@ tailoredGlasso(
 )
 }
 \arguments{
-\item{x}{Either an \eqn{n} by \eqn{p} data matrix or a \eqn{p} by \eqn{p} empirical covariance matrix. If \code{x} is a covariance matrix, tailoredGlasso cannot perform StARS selection of \eqn{\lambda} for the unweighted grapihcal lasso graphs and \code{lambda.opt} must be provided. This is only recommended if another selection routine for \eqn{\lambda} than StARS is desired. The function automatically identifies the input matrix by checking the symmetry. \eqn{n} is the sample size and \eqn{p} is the dimension).}
+\item{x}{Either an \eqn{n} by \eqn{p} data matrix or a \eqn{p} by \eqn{p} empirical covariance matrix. If \code{x} is a covariance matrix, tailoredGlasso cannot perform StARS selection of \eqn{\lambda} for the unweighted grapihcal lasso graphs and \code{lambda.opt} must be provided. This is only recommended if another selection routine for \eqn{\lambda} than StARS is desired. The function automatically identifies the input matrix by checking the symmetry. \eqn{n} is the sample size and \eqn{p} is the dimension.}
 
 \item{prior.matrix}{The \eqn{p} by \eqn{p} prior weight matrix to use. Must be symmetric and have elements in \eqn{[0,1]}.}
 
